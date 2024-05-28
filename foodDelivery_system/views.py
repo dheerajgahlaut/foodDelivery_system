@@ -3,5 +3,11 @@ from django.http import HttpResponse
 
 
 
+# djangousername-djangoadmin
+# djangopassword-dheeraj@123
+
+
+
+
 def home(request):
-    return HttpResponse('hello world')
+    return render(request, 'home.html')
