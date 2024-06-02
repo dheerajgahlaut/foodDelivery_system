@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import os
+from django import conf
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +52,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'accounts',
+    'vendor',
+    'menu',
+    'marketplace',
+    'django.contrib.gis',
+    'customers',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'orders.request_object.RequestObjectMiddleware', # custom middleware created to access the request object in models.py
 ]
 
 ROOT_URLCONF = 'foodDelivery_system.urls'
@@ -72,6 +86,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'accounts.context_processors.get_vendor', #we pass context which we create in context_processors.py
+                'accounts.context_processors.get_google_api',
+                'marketplace.context_processors.get_cart_counter',
+                'marketplace.context_processors.get_cart_amounts',
+                'accounts.context_processors.get_user_profile',
+                'accounts.context_processors.get_paypal_client_id',
             ],
         },
     },
@@ -93,14 +113,16 @@ DATABASES = {
         # 'PASSWORD': 'dheeraj@123',
         # 'HOST':'localhost',
         
-        'ENGINE': 'django.db.backends.postgresql',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
-        'HOST':config('DB_HOST'),
+        'HOST': config('DB_HOST'),
     }
 }
-
+# ---to tell django that we are not using default database---
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -140,13 +162,52 @@ USE_TZ = True
 # ---we need to configure static root for image ,js , css---
 # ---we will collect static by run python manage.py collectstatic in terminal---
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR /'static'
 STATICFILES_DIRS = [
     'foodDelivery_system/static'
 ]
 
+#---media files to handle image wich will come from database---
+MEDIA_URL = '/media/'  #---we need to create media folder ---
+MEDIA_ROOT = BASE_DIR /'media' #---we will delete user folder with create auto , because we in kodel.py we write media path in user---
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#with below code we convert message into dynamic like-it can success or error
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
+
+
+# Email configuration(we write me personal data in .env)
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <django.foodonline@gmail.com>'
+
+#google upi setup
+
+GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+
+if DEBUG == True:
+    os.environ['PATH'] = os.path.join(BASE_DIR, 'myenv\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
+    os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'myenv\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
+    GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'myenv\Lib\site-packages\osgeo\gdal.dll')
+    
+
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+
+
+#to stop blank popup while we click on paypal icon
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+RZP_KEY_ID = config('RZP_KEY_ID')
+RZP_KEY_SECRET = config('RZP_KEY_SECRET')
