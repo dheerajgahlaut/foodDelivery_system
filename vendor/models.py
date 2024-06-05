@@ -19,7 +19,7 @@ class Vendor(models.Model):
         return self.vendor_name
 
     def is_open(self):
-        # Check current day's opening hours. we can not directlly add open and close field in vender database Restaurants often have different opening hours for different days of the week.
+        # Check current day's opening hours. we can not directly add open and close field in vender database Restaurants often have different opening hours for different days of the week.
         today_date = date.today()
         today = today_date.isoweekday()
         
@@ -38,7 +38,7 @@ class Vendor(models.Model):
                 else:
                     is_open = False
         return is_open
-#below function is only notify if admin will change the Licence approval---
+#below function is only notify if admin will change the License approval---
     def save(self, *args, **kwargs):
         if self.pk is not None:
             # Update

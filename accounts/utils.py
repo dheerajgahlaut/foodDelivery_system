@@ -31,7 +31,7 @@ def send_verification_email(request, user, mail_subject, email_template):
     })
     to_email = user.email
     mail = EmailMessage(mail_subject, message, from_email, to=[to_email])
-    mail.content_subtype = "html"#when we want to send html conten in mail then use content_subtype
+    mail.content_subtype = "html"#when we want to send html content in mail then use content_subtype
     mail.send()
 
 

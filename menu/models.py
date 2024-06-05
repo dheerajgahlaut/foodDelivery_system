@@ -11,7 +11,7 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-#in admin dashbord in category s is auto add so we currect with verbose name
+#in admin dashboard in category (s) like-categorys is auto add so we correct it with verbose name
     class Meta:
         verbose_name = 'category'
         verbose_name_plural = 'categories'

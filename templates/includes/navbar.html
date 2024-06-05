@@ -22,7 +22,7 @@
                             <ul>
                                 <li class="location-has-children choose-location">
                                     <form action="#">
-                                        <!--we add id and and a location icon so if we click on location icoan it will get user's current ocation below is js code for it-->
+                                        <!--we add id and and a location icon so if we click on location icoan it will get user's current location below is js code for it-->
                                         <input type="text" value="" name="location" id="location" placeholder="Your current location" autocomplete="off">
                                         <span id="foodbakery_radius_location_open" class="foodbakery-radius-location" onclick="getLocation()"><i class="icon-target5"></i></span>
                                     </form>
@@ -40,7 +40,7 @@
                                 <span class="badge badge-warning" id="cart_counter" style="border-radius: 50px; position: relative; bottom:10px; left: -5px;">{{ cart_count }}</span>
                             </a>
                             {% endif %}
-                            {% comment %} ---if user is login then login butten will not visible--- {% endcomment %}
+                            {% comment %} ---if user is login then login button will not visible--- {% endcomment %}
                             <a href="{% url 'marketplace' %}" class="btn btn-outline-danger text-uppercase font-weight-bold">Marketplace</a>
                             {% if user.is_authenticated %}
                             <a class="cs-color cs-popup-joinus-btn login-popup" href="{% url 'myAccount' %}">My Account</a>
@@ -92,10 +92,10 @@
             type: "GET",
             success: function(response){
                 
-                var current_location = response.results[0].formatted_address //in below we get mat api location in jsx so in jsx we find current address in response.results[0].formatted_address check in console.log
+                var current_location = response.results[0].formatted_address //in below we get map api location in jsx so in jsx we find current address in response.results[0].formatted_address check in console.log
                 x.value = current_location  //now set value in x variable to show in location field
                 sessionStorage.setItem("current_location", current_location) //we store the current location
-                window.location = '?lat='+lat+'&lng='+lng //when location fill in location box after click on location icon then page will refresh so thar nearest restaurent can come to page
+                window.location = '?lat='+lat+'&lng='+lng //when location fill in location box after click on location icon then page will refresh so thar nearest restaurant can come to page
             }
         })
     }

@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 import os
 
-# this is velidation to stop uploding junk file like -pdf in image filed
+# this is validation to stop uploading junk file like -pdf in image filed
 
 def allow_only_images_validator(value):
     ext = os.path.splitext(value.name)[1] # in cover-image.jpg 2 extensions one is cover-image and 2nd is jpg, and value is image name

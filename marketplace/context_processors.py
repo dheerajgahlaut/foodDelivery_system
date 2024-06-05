@@ -3,7 +3,7 @@ from menu.models import FoodItem
 
 # we need to register every function in setting.py
 #we know that navar is added in all pages , and cart is also in navbar , so we want to show card added items in all pages then we need context process, 
-# simply means we use context processer to show dynamic value in all pages, we need to add processor in setting.py
+# simply means we use context processor to show dynamic value in all pages, we need to add processor in setting.py
 
 def get_cart_counter(request):
     cart_count = 0

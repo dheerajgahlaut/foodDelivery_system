@@ -14,9 +14,6 @@ from pathlib import Path
 from decouple import config
 import os
 from django import conf
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 
-# -----if we will push our code in git hub then we dont what that our sensitive information will access by someone then we need to craete folder .env and copy securty key and debug in .env file and configer security key and debug in setting.py
-# and also change in database username and passsword
+# -----if we will push our code in git hub then we dont what that our sensitive information will access by someone then we need to create folder .env and copy security key and debug in .env file and configer security key and debug in setting.py
+# and also change in database username and password
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -152,6 +149,8 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
@@ -168,9 +167,9 @@ STATICFILES_DIRS = [
     'foodDelivery_system/static'
 ]
 
-#---media files to handle image wich will come from database---
+#---media files to handle image which will come from database---
 MEDIA_URL = '/media/'  #---we need to create media folder ---
-MEDIA_ROOT = BASE_DIR /'media' #---we will delete user folder with create auto , because we in kodel.py we write media path in user---
+MEDIA_ROOT = BASE_DIR /'media' #---we will delete user folder with create auto , because we in model.py we write media path in user---
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -186,12 +185,13 @@ MESSAGE_TAGS = {
 
 
 # Email configuration(we write me personal data in .env)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <django.foodonline@gmail.com>'
+DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <kumardheeraj4905@gmail.com>'
 
 #google upi setup
 

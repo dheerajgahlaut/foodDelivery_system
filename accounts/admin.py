@@ -16,4 +16,4 @@ class CustomUserAdmin(UserAdmin):
     
     
 admin.site.register(User,CustomUserAdmin)
-admin.site.register(UserProfile)  #regisstered user profile for admin
+admin.site.register(UserProfile)  #registered user profile for admin

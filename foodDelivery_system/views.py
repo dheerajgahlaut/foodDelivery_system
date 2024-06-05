@@ -18,11 +18,11 @@ def get_or_set_current_location(request):
         lng = request.GET.get('lng')
         request.session['lat'] = lat
         request.session['lng'] = lng
-        return lng, lat #if customer first time click on current location icon then lat and lng will come from frntend and save so user do not need to click on current location again and again
+        return lng, lat #if customer first time click on current location icon then lat and lng will come from frontend and save so user do not need to click on current location again and again
     else:
         return None
 
-#when lat and lng will get from current location click on location icon in navbar then below funcion will help to show nearent restaurent
+#when lat and lng will get from current location click on location icon in navbar then below function will help to show nearest restaurant
 def home(request):
     if get_or_set_current_location(request) is not None:
 
@@ -33,7 +33,7 @@ def home(request):
         for v in vendors:
             v.kms = round(v.distance.km, 1)
     else:
-        vendors = Vendor.objects.filter(is_approved=True, user__is_active=True)[:8] #means max 8 restro will show
+        vendors = Vendor.objects.filter(is_approved=True, user__is_active=True)[:8] #means max 8 restaurant will show
     context = {
         'vendors': vendors,
     }

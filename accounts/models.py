@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db.models.fields.related import ForeignKey, OneToOneField
+from django.db.models.fields.related import ForeignKey,OneToOneField
 
 from django.contrib.gis.db import models as gismodels
 from django.contrib.gis.geos import Point
@@ -92,7 +92,7 @@ class User(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
-    user = OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='users/profile_pictures', blank=True, null=True)#for image field install pip install pillow
     cover_photo = models.ImageField(upload_to='users/cover_photos', blank=True, null=True)
     address = models.CharField(max_length=250, blank=True, null=True)
@@ -112,7 +112,7 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.email
 
-    #if user enter his location and enter longitude and latitude then it iwll auto save in GIS map
+    #if user enter his location and enter longitude and latitude then it will auto save in GIS map
     def save(self, *args, **kwargs):
         if self.latitude and self.longitude:
             self.location = Point(float(self.longitude), float(self.latitude))

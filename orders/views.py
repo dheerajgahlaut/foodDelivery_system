@@ -26,7 +26,7 @@ def place_order(request):
     cart_count = cart_items.count()
     if cart_count <= 0:
         return redirect('marketplace')
-# below code is for when we add orders from different vender so orderd-venders need to preselected form all venders filed  in admin panal
+# below code is for when we add orders from different vender so order-venders need to preselected form all venders filed  in admin panel
     vendors_ids = []
     for i in cart_items:
         if i.fooditem.vendor.id not in vendors_ids:
@@ -66,8 +66,8 @@ def place_order(request):
     grand_total = get_cart_amounts(request)['grand_total']
     tax_data = get_cart_amounts(request)['tax_dict']
     
-    if request.method == 'POST':        #if request of form is post then user had submited the form 
-        form = OrderForm(request.POST) #user submit orderform which is in order(forms.py) and we will validate the data 
+    if request.method == 'POST':        #if request of form is post then user had submitted the form 
+        form = OrderForm(request.POST) #user submit order-form which is in order(forms.py) and we will validate the data 
         if form.is_valid():
             order = Order()
             order.first_name = form.cleaned_data['first_name']
@@ -85,7 +85,7 @@ def place_order(request):
             order.total_data = json.dumps(total_data)
             order.total_tax = total_tax
             order.payment_method = request.POST['payment_method'] #we are getting payment method name from frontend
-            order.save() # order id/ pk is generated  (primery key only generated when details are saved )
+            order.save() # order id/ pk is generated  (primary key only generated when details are saved )
             order.order_number = generate_order_number(order.id)
             order.vendors.add(*vendors_ids)#use * for add data to many many fields
             order.save()
@@ -119,7 +119,7 @@ def place_order(request):
 
 @login_required(login_url='login')
 def payments(request):
-        # Check if the request is ajax or not(because ajex request is comming from place order)
+        # Check if the request is ajax or not(because ajax request is coming from place order)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest' and request.method == 'POST':
         # STORE THE PAYMENT DETAILS IN THE PAYMENT MODEL
         order_number = request.POST.get('order_number')

@@ -37,7 +37,7 @@
                                         <a href=""><p class="mb-0 font-weight-bold">{{ food }}</p>
                                         <small class="text-muted">{{food.description}}</small></a>
                                     </td>
-                                    {% comment %} ---we create this td because if food is available then show available--- {% endcomment %}
+                                    {% comment %} ---we create this below td because if food is available then show available--- {% endcomment %}
                                     <td>
                                         {% if food.is_available %}
                                         <span class="badge badge-success">Available</span>

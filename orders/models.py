@@ -62,7 +62,7 @@ class Order(models.Model):
     def order_placed_to(self):
         return ", ".join([str(i) for i in self.vendors.all()])
     
-# below code is calculate total food sell price by per vender,we can not take request objevt directly in model.py we need middleware
+# below code is calculate total food sell price by per vender,we can not take request object directly in model.py we need middleware
     def get_total_by_vendor(self):
         vendor = Vendor.objects.get(user=request_object.user)
         subtotal = 0

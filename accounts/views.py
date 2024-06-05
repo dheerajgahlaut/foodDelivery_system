@@ -10,9 +10,9 @@ from .forms import UserForm
 from .models import User, UserProfile
 from django.contrib import messages, auth
 from .utils import detectUser, send_verification_email
-from django.contrib.auth.decorators import login_required, user_passes_test 
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-from django.core.exceptions import PermissionDenied #this is for Restrict the vendor from accessing the customer page
+from django.core.exceptions import PermissionDenied
 from vendor.models import Vendor
 from django.template.defaultfilters import slugify
 from orders.models import Order
@@ -42,16 +42,14 @@ def registerUser(request):
     elif request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            # Create the user using the form, we have 3 way to handle password one is with direct form and other is with create_user method 
-            
+            # Create the user using the form
             # password = form.cleaned_data['password']
-            # user = form.save(commit=False)    #we use commit because if we want to save this form for particuler role like - restaurent or normal user,because we have same login form for both 
+            # user = form.save(commit=False)
             # user.set_password(password)
             # user.role = User.CUSTOMER
             # user.save()
 
-            # Create the user using create_user method this is second wayto handle password
-            #----In Django forms, the cleaned_data attribute is used to store and access the validated and cleaned data for each field after the form's clean methods have been called.
+            # Create the user using create_user method
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             username = form.cleaned_data['username']
@@ -61,11 +59,11 @@ def registerUser(request):
             user.role = User.CUSTOMER
             user.save()
 
-            # Send verification email(functional part is written in utils.py)
+            # Send verification email
             mail_subject = 'Please activate your account'
             email_template = 'accounts/emails/account_verification_email.html'
             send_verification_email(request, user, mail_subject, email_template)
-            messages.success(request, 'Your account has been registered sucessfully!')
+            messages.success(request, 'Your account has been registered successfully!')
             return redirect('registerUser')
         else:
             print('invalid form')
@@ -98,7 +96,7 @@ def registerVendor(request):
             vendor = v_form.save(commit=False)
             vendor.user = user
             vendor_name = v_form.cleaned_data['vendor_name']
-            vendor.vendor_slug = slugify(vendor_name)+'-'+str(user.id) #we want unique slug so concadinate userid with it,id is int si cinvert into str
+            vendor.vendor_slug = slugify(vendor_name)+'-'+str(user.id)
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
@@ -108,7 +106,7 @@ def registerVendor(request):
             email_template = 'accounts/emails/account_verification_email.html'
             send_verification_email(request, user, mail_subject, email_template)
 
-            messages.success(request, 'Your account has been registered sucessfully! Please wait for the approval.')
+            messages.success(request, 'Your account has been registered successfully! Please wait for the approval.')
             return redirect('registerVendor')
         else:
             print('invalid form')
@@ -167,7 +165,7 @@ def logout(request):
     messages.info(request, 'You are logged out.')
     return redirect('login')
 
-# ---this login decorator will redirect the login page if person is not login,no one can not open myaccount by url help---
+
 @login_required(login_url='login')
 def myAccount(request):
     user = request.user
@@ -176,7 +174,7 @@ def myAccount(request):
 
 
 @login_required(login_url='login')
-@user_passes_test(check_role_customer) #you can ensure that only authorized users can access certain views. 
+@user_passes_test(check_role_customer)
 def custDashboard(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True)
     recent_orders = orders[:5]
@@ -189,9 +187,8 @@ def custDashboard(request):
 
 
 @login_required(login_url='login')
-@user_passes_test(check_role_vendor) #you can ensure that only authorized users can access certain views. 
+@user_passes_test(check_role_vendor)
 def vendorDashboard(request):
-    #below filed create many to many relation in order and vender and create a new relation table in database
     vendor = Vendor.objects.get(user=request.user)
     orders = Order.objects.filter(vendors__in=[vendor.id], is_ordered=True).order_by('created_at')
     recent_orders = orders[:10]
@@ -272,4 +269,3 @@ def reset_password(request):
             messages.error(request, 'Password do not match!')
             return redirect('reset_password')
     return render(request, 'accounts/reset_password.html')
-    

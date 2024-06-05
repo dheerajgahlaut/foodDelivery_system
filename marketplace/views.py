@@ -32,7 +32,7 @@ def marketplace(request):
 def vendor_detail(request, vendor_slug):
     vendor = get_object_or_404(Vendor, vendor_slug=vendor_slug)
 
-    categories = Category.objects.filter(vendor=vendor).prefetch_related( #we want food items in related category, so stablish a relation b/w category and fooritems in model.py of menu
+    categories = Category.objects.filter(vendor=vendor).prefetch_related( #we want food items in related category, so stablish a relation b/w category and food-items in model.py of menu
         Prefetch(
             'fooditems',
             queryset = FoodItem.objects.filter(is_available=True)
@@ -74,7 +74,7 @@ def add_to_cart(request, food_id):
                     chkCart.save()
                     return JsonResponse({'status': 'Success', 'message': 'Increased the cart quantity', 'cart_counter': get_cart_counter(request), 'qty': chkCart.quantity, 'cart_amount': get_cart_amounts(request)})
                 except:
-                    # if the user not added that food to the cart, add 1 quentity in cart
+                    # if the user not added that food to the cart, add 1 quantity in cart
                     chkCart = Cart.objects.create(user=request.user, fooditem=fooditem, quantity=1)
                     return JsonResponse({'status': 'Success', 'message': 'Added the food to the cart', 'cart_counter': get_cart_counter(request), 'qty': chkCart.quantity, 'cart_amount': get_cart_amounts(request)})
             except:
@@ -152,10 +152,10 @@ def search(request):
         fetch_vendors_by_fooditems = FoodItem.objects.filter(food_title__icontains=keyword, is_available=True).values_list('vendor', flat=True)
         
         vendors = Vendor.objects.filter(Q(id__in=fetch_vendors_by_fooditems) | Q(vendor_name__icontains=keyword, is_approved=True, user__is_active=True)) #(__) is use for Traverse relationships between models.
-        #below code is for search restaurent with google , you can read this documentation in document.geodjango official site
+        #below code is for search restaurant with google , you can read this documentation in document.geo-django official site
         if latitude and longitude and radius:
             pnt = GEOSGeometry('POINT(%s %s)' % (longitude, latitude)) #we use %s because pass  longitude/latitude which is int,this is string replace technique
-           #below code is for user"s nearest location restaurent
+           #below code is for user"s nearest location restaurant
             vendors = Vendor.objects.filter(Q(id__in=fetch_vendors_by_fooditems) | Q(vendor_name__icontains=keyword, is_approved=True, user__is_active=True),
             user_profile__location__distance_lte=(pnt, D(km=radius))
             ).annotate(distance=Distance("user_profile__location", pnt)).order_by("distance")
@@ -175,7 +175,7 @@ def search(request):
 
 @login_required(login_url='login')
 def checkout(request):
-    cart_items = Cart.objects.filter(user=request.user).order_by('created_at')#we want to show card items in chackout page so we taking object from cart of login user (user=request.user)
+    cart_items = Cart.objects.filter(user=request.user).order_by('created_at')#we want to show card items in checkout page so we taking object from cart of login user (user=request.user)
     cart_count = cart_items.count()
     if cart_count <= 0:
         return redirect('marketplace')# if card count is zero , means no items in card

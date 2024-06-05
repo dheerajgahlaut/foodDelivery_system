@@ -15,7 +15,7 @@ class UserForm(forms.ModelForm):
         cleaned_data = super(UserForm, self).clean() #super(UserForm, self).clean() calls the clean method of the parent class (forms.Form or forms.ModelForm).
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
-#----these are non filed error comes from django form so we add it in front end sepretly from field error
+#----these are non filed error comes from django form so we add it in front end separately from field error
         if password != confirm_password:
             raise forms.ValidationError(
                 "Password does not match!"
@@ -24,7 +24,7 @@ class UserForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Start typing...', 'required': 'required'}))
-    #for custom validator we will take Fileinput inplace of imageinput
+    #for custom validator we will take Fileinput inplace of image input
     profile_picture = forms.FileField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}), validators=[allow_only_images_validator])#this is validator function which we create inside validator.py
     cover_photo = forms.FileField(widget=forms.FileInput(attrs={'class': 'btn btn-info'}), validators=[allow_only_images_validator])
     

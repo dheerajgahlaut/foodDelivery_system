@@ -22,7 +22,7 @@ def get_user_profile(request):
     return dict(user_profile=user_profile)
 
 
-#google api setup(we put below 2 code in secure file .env and we need these id in google api CDN and paypal CDN in base.html so we write these key here we alredy know that context processer content can access in all file)
+#google api setup(we put below 2 code in secure file .env and we need these id in google api CDN and paypal CDN in base.html so we write these key here we already know that context processor content can access in all file)
 def get_google_api(request):
     return {'GOOGLE_API_KEY': settings.GOOGLE_API_KEY}
 

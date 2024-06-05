@@ -98,7 +98,7 @@
                                             <span>{{ category.description }}</span>
                                         </div>
                                         <ul>
-                                            <!--we want that food items need to show with specific category so we put plavce name in models.py(menu),and prefatch in views.py(marketplace)-->
+                                            <!--we want that food items need to show with specific category so we put place name in models.py(menu),and prefatch in views.py(marketplace)-->
                                             {% for food in category.fooditems.all %} 
                                             <li>
                                                 <div class="image-holder"> <img src="{{ food.image.url }}" alt=""></div>
@@ -121,7 +121,7 @@
                                         {% endfor %}
                                         
                                     </div>
-                                <!--if we add items then quantity should also increate-->
+                                <!--if we add items then quantity should also increase-->
                                 
                                     {% for item in cart_items %}
 
